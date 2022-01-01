@@ -54,7 +54,13 @@ exports.submitLogin = async (req, res)=>{
 exports.home = function(req, res) {
     
     if(req.session.isAuth) {
-        res.render('home');
+        User.findOne({_id: req.session.userID}, function(err, user) {
+            if (err) {
+                throw err;
+            } else {
+                res.render('home', {name: user.username});
+            }
+        });    
     } else {
         res.redirect('/login');
     }
@@ -70,7 +76,7 @@ exports.register = async(req, res) => {
         res.redirect('/registration');
     }else{
 
-        if(password.length ==0){
+        if(password.length==0){
             req.flash('register', 'password is empty');
             res.redirect('/registration');
         }else{
@@ -417,9 +423,7 @@ exports.search = function(req, res) {
                         }
 
                     }
-                    console.log(products);
-
-
+                    
                     res.render('searchresults', {products:products});
                 } else {
                     res.render('searchresults');
