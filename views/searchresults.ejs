@@ -5,7 +5,7 @@
         body {
             background-image: url("background3.jpg");
             background-repeat: no-repeat;
-            background-size: 100%;
+            background-size: 400%;
         }
 
         h1 {
@@ -54,8 +54,9 @@
     
     <% if (products.length > 0) { %>
         <% products.forEach((product)=> { %>
-            <img src='<%= product.productname%>.jpg'/>
-            <form method="GET" action='/view<%=product.productname%>' class="form-inline my-2 my-lg-0">
+            <h1><%= product%></h1>
+            <img src='<%= product%>.jpg'/>
+            <form method="GET" action='/view<%=product%>' class="form-inline my-2 my-lg-0">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">GO</button>
             </form>
         <% }) %>

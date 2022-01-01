@@ -65,8 +65,13 @@ exports.register = async(req, res) => {
     const {username, email,password} = req.body;
     let user = await User.findOne({email: email});
  
-        if (user) {
-            req.flash('register', 'email already exists');
+    if (user) {
+        req.flash('register', 'email already exists');
+        res.redirect('/registration');
+    }else{
+
+        if(password.length ==0){
+            req.flash('register', 'password is empty');
             res.redirect('/registration');
         }else{
             const hashedPsw = await bcrypt.hash(password, 12);
@@ -78,7 +83,7 @@ exports.register = async(req, res) => {
             await newuser.save();
             res.redirect('/login');
         }
-    
+    }
 };
 
 
@@ -389,7 +394,33 @@ exports.search = function(req, res) {
             } else {
 
                 if (product) {
-                    res.render('searchresults', {products:product});
+                    
+                    // loop over products and modify their names to match the search and put them in an array
+                    var products = [];
+                    for (var i = 0; i < product.length; i++) {
+                        if(product[i].productname === 'Galaxy S21 Ultra') {
+                            products.push('galaxy');
+                        }else if(product[i].productname === 'iPhone 13 Pro') {
+                            products.push('iphone');
+                        }
+                        else if(product[i].productname === 'Leaves of Grass') {
+                            products.push('leaves');
+                        }
+                        else if(product[i].productname === 'The Sun and Her Flowers') {
+                            products.push('sun');
+                        }
+                        else if(product[i].productname === 'Tennis Racket') {
+                            products.push('tennis');
+                        }
+                        else if(product[i].productname === 'Boxing Bag') {
+                            products.push('boxing');
+                        }
+
+                    }
+                    console.log(products);
+
+
+                    res.render('searchresults', {products:products});
                 } else {
                     res.render('searchresults');
                 }
