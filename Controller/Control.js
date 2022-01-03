@@ -385,7 +385,7 @@ exports.viewCart = function(req, res) {
 };
 
 
-const escapeRegex = function(text) {
+var escapeRegex = function(text) {
     return text.replace(/[-[\]{}()*+?!%@&.,\\^$|#\s]/g, "\\$&"); // to escape the matching characters
 };
 
@@ -394,8 +394,7 @@ exports.search = function(req, res) {
         var parsedUser = req.session.userID;
         
         var search = req.body.Search;        
-        var regex = new RegExp(exports.escapeRegex(search), 'gi');
-        console.log(regex);
+        var regex = new RegExp(escapeRegex(search), 'gi');
         Product.find({productname: new RegExp(regex, "gi")}, function(err, product) {
             
             if (err) {
