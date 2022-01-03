@@ -1,7 +1,6 @@
 Cart = require('../models/Cart');
 var User = require('../models/User');
 var Product = require('../models/Product');
-var fs = require('fs');
 const bcrypt = require('bcryptjs');
 const { redirect } = require('statuses');
 const flash = require('connect-flash');
@@ -386,14 +385,18 @@ exports.viewCart = function(req, res) {
 };
 
 
-// search function using regex
+const escapeRegex = function(text) {
+    return text.replace(/[-[\]{}()*+?!%@&.,\\^$|#\s]/g, "\\$&"); // to escape the matching characters
+};
+
 exports.search = function(req, res) {
     if (req.session.isAuth){
         var parsedUser = req.session.userID;
         
-        var search = req.body.Search;
-        var search = search.toLowerCase();
-        Product.find({productname: new RegExp(search, "i")}, function(err, product) {
+        var search = req.body.Search;        
+        var regex = new RegExp(exports.escapeRegex(search), 'gi');
+        console.log(regex);
+        Product.find({productname: new RegExp(regex, "gi")}, function(err, product) {
             
             if (err) {
                 console.log(err);
@@ -401,7 +404,7 @@ exports.search = function(req, res) {
 
                 if (product) {
                     
-                    // loop over products and modify their names to match the search and put them in an array
+                    
                     var products = [];
                     for (var i = 0; i < product.length; i++) {
                         if(product[i].productname === 'Galaxy S21 Ultra') {
