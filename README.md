@@ -10,6 +10,7 @@ simple shopping website
 - Register for the website
 - Login
 - View Products
+- Add products to your cart
 - View a video for the product 
 - Search for Products
 - Logout
